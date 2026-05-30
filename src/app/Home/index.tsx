@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, Image, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 
 import { Item } from '@/components/Item';
 import { Input } from '@/components/Input';
@@ -10,23 +10,26 @@ import { styles } from './styles';
 import { FilterStatus } from '@/types/FilterStatus';
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
-const ITENS = [
-  {id: "1", status: FilterStatus.DONE, description: "Café"},
-  {id: "2", status: FilterStatus.DONE, description: "Pão"},
-  {id: "3", status: FilterStatus.PENDING, description: "Leite"},
-  {id: "4", status: FilterStatus.PENDING, description: "Ovos"},
-  {id: "5", status: FilterStatus.DONE, description: "Frutas"},
-  {id: "6", status: FilterStatus.PENDING, description: "Legumes"},
-  {id: "7", status: FilterStatus.DONE, description: "Carne"},
-  {id: "8", status: FilterStatus.PENDING, description: "Peixe"},
-  {id: "9", status: FilterStatus.DONE, description: "Arroz"},
-  {id: "10", status: FilterStatus.PENDING, description: "Feijão"},
-]
 
 export function Home() {
   const [filter, setFilter] = useState(FilterStatus.PENDING)
   const [description, setDescription] = useState("")
+  const [itens, setItens] = useState<any>([])
 
+  function handleAddItem() {
+    if (!description.trim()) {
+      return Alert.alert("Atenção", "A descrição do item não pode ser vazia.")
+    }
+
+    const newItem = {
+      id: Math.random().toString(2),
+      description,
+      status: FilterStatus.PENDING,
+    }
+
+    setItens((prevState) => [...prevState, newItem])
+
+  }
   return (
     <View style={styles.container}>
       <Image source={require('@/assets/logo.png')} style={styles.logo} />
@@ -36,7 +39,7 @@ export function Home() {
           placeholder='O que você precisa comprar?'
           onChangeText={setDescription}
         />
-        <Button title="Entrar" />
+        <Button title="Entrar" onPress={handleAddItem}/>
       </View>
 
       <View style={styles.content}>
@@ -57,7 +60,7 @@ export function Home() {
         </View>
 
         <FlatList 
-          data={ITENS}
+          data={itens}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Item 
