@@ -1,12 +1,12 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FilterStatus } from "@/types/FilterStatus";
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { FilterStatus } from "@/types/FilterStatus"
 
-const ITENS_STORAGE_KEY = "@comprar:itens";
+const ITENS_STORAGE_KEY = "@comprar:itens"
 
 export type ItemStorage = {
-    id: string;
-    status: FilterStatus;
-    description: string;
+    id: string
+    status: FilterStatus
+    description: string
 }
 
 
@@ -20,6 +20,13 @@ async function get(): Promise<ItemStorage[]> {
     }
 }
 
+async function getByStatus(status: FilterStatus): Promise<ItemStorage[]> {
+    const itens = await get()
+
+    return itens.filter((item) => item.status === status)
+}
+
 export const itensStorage = {
-    get
+    get,
+    getByStatus
 }
