@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Image, Text, TouchableOpacity, FlatList, Alert, Platform } from 'react-native';
 
 import { Item } from '@/components/Item';
@@ -8,13 +8,14 @@ import { Filter } from '@/components/Filter';
 
 import { styles } from './styles';
 import { FilterStatus } from '@/types/FilterStatus';
+import { itensStorage, ItemStorage } from '@/storage/itensStorage';
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 
 export function Home() {
   const [filter, setFilter] = useState(FilterStatus.PENDING)
   const [description, setDescription] = useState("")
-  const [itens, setItens] = useState<any>([])
+  const [itens, setItens] = useState<ItemStorage[]>([])
 
   function showEmptyDescriptionAlert() {
     if (Platform.OS === 'web') {
@@ -38,6 +39,25 @@ export function Home() {
     }
 
   }
+
+  async function getItens() {
+    try {
+      const response = await itensStorage.get()
+      setItens(response)
+    } catch (error) {
+      console.error("Erro ao obter itens:", error)
+      if (Platform.OS === 'web') {
+        window.alert('Não foi possível obter os itens. Por favor, tente novamente mais tarde.')
+        return
+      }
+      Alert.alert('Erro', 'Não foi possível obter os itens. Por favor, tente novamente mais tarde.')
+    }
+  }
+
+  useEffect(() => {
+    getItens()
+  }, [])
+
   return (
     <View style={styles.container}>
       <Image source={require('@/assets/logo.png')} style={styles.logo} />
