@@ -1,0 +1,12 @@
+{
+    "material-icon-theme.files.associations": {
+        "*.ts": "typescript",
+        "**.json": "json"
+    },
+    "material-icon-theme.folders.associations": {
+        "storage": "Database",
+        "Button": "Base",
+        "Item": "Changesets",
+        "StatusIcon": "Scons"
+    }
+}

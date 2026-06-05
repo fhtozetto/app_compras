@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Image, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { View, Image, Text, TouchableOpacity, FlatList, Alert, Platform } from 'react-native';
 
 import { Item } from '@/components/Item';
 import { Input } from '@/components/Input';
@@ -16,9 +16,19 @@ export function Home() {
   const [description, setDescription] = useState("")
   const [itens, setItens] = useState<any>([])
 
+  function showEmptyDescriptionAlert() {
+    if (Platform.OS === 'web') {
+      window.alert('A descrição do item não pode ser vazia.')
+      return
+    }
+
+    Alert.alert('Atenção', 'A descrição do item não pode ser vazia.')
+  }
+
   function handleAddItem() {
     if (!description.trim()) {
-      return Alert.alert("Atenção", "A descrição do item não pode ser vazia.")
+      showEmptyDescriptionAlert()
+      return
     }
 
     const newItem = {
@@ -26,8 +36,6 @@ export function Home() {
       description,
       status: FilterStatus.PENDING,
     }
-
-    setItens((prevState) => [...prevState, newItem])
 
   }
   return (
