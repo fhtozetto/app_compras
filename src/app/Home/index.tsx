@@ -26,7 +26,7 @@ export function Home() {
     Alert.alert('Atenção', 'A descrição do item não pode ser vazia.')
   }
 
-  function handleAddItem() {
+  async function handleAddItem() {
     if (!description.trim()) {
       showEmptyDescriptionAlert()
       return
@@ -37,6 +37,10 @@ export function Home() {
       description,
       status: FilterStatus.PENDING,
     }
+
+    await itensStorage.add(newItem)
+    await getItens()
+    setDescription("")
 
   }
 
