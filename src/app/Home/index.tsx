@@ -39,14 +39,13 @@ export function Home() {
     }
 
     await itensStorage.add(newItem)
-    await getItens()
-    setDescription("")
+    await itemsByStatus()
 
   }
 
-  async function getItens() {
+  async function itemsByStatus() {
     try {
-      const response = await itensStorage.get()
+      const response = await itensStorage.getByStatus(filter)
       setItens(response)
     } catch (error) {
       console.error("Erro ao obter itens:", error)
@@ -59,8 +58,8 @@ export function Home() {
   }
 
   useEffect(() => {
-    getItens()
-  }, [])
+    itemsByStatus()
+  }, [filter])
 
   return (
     <View style={styles.container}>
