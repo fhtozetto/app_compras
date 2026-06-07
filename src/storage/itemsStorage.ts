@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { FilterStatus } from "@/types/FilterStatus"
 
-const ITENS_STORAGE_KEY = "@comprar:itens"
+const ITEMS_STORAGE_KEY = "@comprar:itens"
 
 export type ItemStorage = {
     id: string
@@ -12,7 +12,7 @@ export type ItemStorage = {
 
 async function get(): Promise<ItemStorage[]> {
     try {
-        const storage = await AsyncStorage.getItem(ITENS_STORAGE_KEY)
+        const storage = await AsyncStorage.getItem(ITEMS_STORAGE_KEY)
 
         return storage ? JSON.parse(storage) : []
     } catch (error) {
@@ -28,7 +28,7 @@ async function getByStatus(status: FilterStatus): Promise<ItemStorage[]> {
 
 async function save(itens: ItemStorage[]): Promise<void> {
     try {
-        await AsyncStorage.setItem(ITENS_STORAGE_KEY, JSON.stringify(itens))
+        await AsyncStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(itens))
     } catch (error) {
         throw new Error("ITENS_SAVE: " + error)
     }

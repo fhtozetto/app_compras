@@ -8,7 +8,7 @@ import { Filter } from '@/components/Filter';
 
 import { styles } from './styles';
 import { FilterStatus } from '@/types/FilterStatus';
-import { itensStorage, ItemStorage } from '@/storage/itensStorage';
+import { itensStorage, ItemStorage } from '@/storage/itemsStorage';
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 
@@ -41,6 +41,13 @@ export function Home() {
     await itensStorage.add(newItem)
     await itemsByStatus()
 
+    if (Platform.OS === 'web') {
+      window.alert(`O item "${description}" foi adicionado com sucesso!`)
+    } else if (Platform.OS === 'android' || Platform.OS === 'ios') {
+      Alert.alert('Adicionado', `O item "${description}" foi adicionado com sucesso!`)
+    }
+    setDescription("")
+    setFilter(FilterStatus.PENDING)
   }
 
   async function itemsByStatus() {
@@ -69,6 +76,7 @@ export function Home() {
         <Input 
           placeholder='O que você precisa comprar?'
           onChangeText={setDescription}
+          value={description}
         />
         <Button title="Entrar" onPress={handleAddItem}/>
       </View>
