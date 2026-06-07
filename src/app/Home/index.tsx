@@ -64,6 +64,20 @@ export function Home() {
     }
   }
 
+  async function handleRemoveItem(id: string) {
+    try {
+      await itensStorage.remove(id)
+      await itemsByStatus()
+    } catch (error) {
+      console.error("Erro ao remover item:", error)
+      if (Platform.OS === 'web') {
+        window.alert('Não foi possível remover o item. Por favor, tente novamente mais tarde.')
+        return
+      }
+      Alert.alert('Erro', 'Não foi possível remover o item. Por favor, tente novamente mais tarde.')
+    }
+  }
+
   useEffect(() => {
     itemsByStatus()
   }, [filter])
@@ -105,7 +119,7 @@ export function Home() {
             <Item 
               data={item} 
               onStatus={() => {console.log("Muda Status")}}
-              onRemove={() => {console.log("Remover")}}
+              onRemove={() => {handleRemoveItem(item.id)}}
             />
           )}
           showsVerticalScrollIndicator={false}
