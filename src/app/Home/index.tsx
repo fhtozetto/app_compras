@@ -108,7 +108,21 @@ export function Home() {
         }
         Alert.alert('Erro', 'Não foi possível limpar os itens. Por favor, tente novamente mais tarde.')
     } 
-  }   
+  } 
+  
+  async function handleToggleStatus(id: string) {
+    try {
+      await itensStorage.toggleStatus(id)
+      await itemsByStatus()
+    } catch (error) {
+      console.error("Erro ao atualizar status do item:", error)
+      if (Platform.OS === 'web') {
+        window.alert('Não foi possível atualizar o status do item. Por favor, tente novamente mais tarde.')
+        return
+      }
+      Alert.alert('Erro', 'Não foi possível atualizar o status do item. Por favor, tente novamente mais tarde.')
+    }
+  }
 
   useEffect(() => {
     itemsByStatus()
@@ -150,7 +164,7 @@ export function Home() {
           renderItem={({ item }) => (
             <Item 
               data={item} 
-              onStatus={() => {console.log("Muda Status")}}
+              onStatus={() => {handleToggleStatus(item.id)}}
               onRemove={() => {handleRemoveItem(item.id)}}
             />
           )}
