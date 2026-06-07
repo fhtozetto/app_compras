@@ -52,11 +52,20 @@ async function add(item: ItemStorage): Promise<void> {
     } catch (error) {
         throw new Error("ITENS_ADD: " + error)
     } 
-}  
+} 
+
+async function clear(): Promise<void> {
+    try {
+        await AsyncStorage.removeItem(ITEMS_STORAGE_KEY)
+    } catch (error) {
+        throw new Error("ITENS_CLEAR: " + error)
+    }
+}
 
 export const itensStorage = {
     get,
     getByStatus,
     add,
-    remove
+    remove,
+    clear
 }

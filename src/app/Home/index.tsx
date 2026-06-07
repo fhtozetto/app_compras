@@ -78,6 +78,38 @@ export function Home() {
     }
   }
 
+  function handleClear() {
+    if (Platform.OS === 'web') {
+      const confirmed = window.confirm('Deseja realmente limpar todos os itens?')
+      if (confirmed) onClear()
+      return
+    }
+    Alert.alert('Limpar', 'Deseja realmente limpar todos os itens?', [
+      {
+        text: 'Não',
+        style: 'cancel',
+      },
+      {
+        text: 'Sim',
+        onPress: async () => {onClear()}
+      },
+    ])
+  }
+
+  async function onClear() {
+    try {
+      await itensStorage.clear()
+      setItens([])
+    } catch (error) {
+        console.error("Erro ao limpar itens:", error)
+        if (Platform.OS === 'web') {
+          window.alert('Não foi possível limpar os itens. Por favor, tente novamente mais tarde.')
+          return
+        }
+        Alert.alert('Erro', 'Não foi possível limpar os itens. Por favor, tente novamente mais tarde.')
+    } 
+  }   
+
   useEffect(() => {
     itemsByStatus()
   }, [filter])
@@ -107,7 +139,7 @@ export function Home() {
               />
             ))
           }
-          <TouchableOpacity style={styles.clearButton}>
+          <TouchableOpacity style={styles.clearButton} onPress={handleClear}>
             <Text style={styles.clearText}>Limpar</Text>
           </TouchableOpacity>
         </View>
