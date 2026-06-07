@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native"
 
+// Estilos do botao principal usado no formulario.
 export const styles = StyleSheet.create({
     container: {
         backgroundColor: "#2c46b1",

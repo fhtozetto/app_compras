@@ -5,11 +5,13 @@ import { styles } from "./styles";
 import { FilterStatus } from "@/types/FilterStatus";
 import { StatusIcon } from "../StatusIcon";
 
+// Propriedades do botao de filtro, incluindo estado visual ativo.
 type Props = TouchableOpacityProps & {
     status: FilterStatus
     isActive: boolean
 }
 
+// Componente de filtro para alternar entre pendentes e comprados.
 export function Filter({ status, isActive, ...rest }: Props) {
     return (
         <TouchableOpacity 

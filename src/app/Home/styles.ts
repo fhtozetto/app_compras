@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+// Estilos da tela Home: cabecalho, formulario, lista e estados vazios.
 export const styles = StyleSheet.create({
   container: {
     flex: 1,

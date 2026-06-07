@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 
+// Estilos do campo de entrada de texto.
 export const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',

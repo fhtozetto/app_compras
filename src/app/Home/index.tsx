@@ -10,13 +10,16 @@ import { styles } from './styles';
 import { FilterStatus } from '@/types/FilterStatus';
 import { itensStorage, ItemStorage } from '@/storage/itemsStorage';
 
+// Define os filtros exibidos no cabecalho da tela.
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 
 export function Home() {
+  // Estados locais de filtro, campo de texto e itens renderizados.
   const [filter, setFilter] = useState(FilterStatus.PENDING)
   const [description, setDescription] = useState("")
   const [itens, setItens] = useState<ItemStorage[]>([])
 
+  // Exibe mensagem de validacao quando a descricao esta vazia.
   function showEmptyDescriptionAlert() {
     if (Platform.OS === 'web') {
       window.alert('A descrição do item não pode ser vazia.')
@@ -26,6 +29,7 @@ export function Home() {
     Alert.alert('Atenção', 'A descrição do item não pode ser vazia.')
   }
 
+  // Cria um novo item, salva e atualiza a lista filtrada.
   async function handleAddItem() {
     if (!description.trim()) {
       showEmptyDescriptionAlert()
@@ -50,6 +54,7 @@ export function Home() {
     setFilter(FilterStatus.PENDING)
   }
 
+  // Busca itens no storage com base no filtro atual.
   async function itemsByStatus() {
     try {
       const response = await itensStorage.getByStatus(filter)
@@ -64,6 +69,7 @@ export function Home() {
     }
   }
 
+  // Remove item por id e recarrega a lista.
   async function handleRemoveItem(id: string) {
     try {
       await itensStorage.remove(id)
@@ -78,6 +84,7 @@ export function Home() {
     }
   }
 
+  // Solicita confirmacao para limpar toda a lista.
   function handleClear() {
     if (Platform.OS === 'web') {
       const confirmed = window.confirm('Deseja realmente limpar todos os itens?')
@@ -96,6 +103,7 @@ export function Home() {
     ])
   }
 
+  // Executa a limpeza no storage e reseta o estado local.
   async function onClear() {
     try {
       await itensStorage.clear()
@@ -110,6 +118,7 @@ export function Home() {
     } 
   } 
   
+  // Alterna o status do item e atualiza os dados da tela.
   async function handleToggleStatus(id: string) {
     try {
       await itensStorage.toggleStatus(id)
@@ -124,10 +133,12 @@ export function Home() {
     }
   }
 
+  // Recarrega os itens sempre que o filtro for alterado.
   useEffect(() => {
     itemsByStatus()
   }, [filter])
 
+  // Estrutura visual da tela principal.
   return (
     <View style={styles.container}>
       <Image source={require('@/assets/logo.png')} style={styles.logo} />

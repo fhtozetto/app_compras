@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+// Estilos de layout para cada linha de item da lista.
 export const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',

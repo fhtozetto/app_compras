@@ -1,8 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { FilterStatus } from "@/types/FilterStatus"
 
+// Chave unica usada para persistir os itens no AsyncStorage.
 const ITEMS_STORAGE_KEY = "@comprar:itens"
 
+// Contrato dos itens salvos localmente.
 export type ItemStorage = {
     id: string
     status: FilterStatus
@@ -10,6 +12,7 @@ export type ItemStorage = {
 }
 
 
+// Busca todos os itens salvos no dispositivo.
 async function get(): Promise<ItemStorage[]> {
     try {
         const storage = await AsyncStorage.getItem(ITEMS_STORAGE_KEY)
@@ -20,12 +23,14 @@ async function get(): Promise<ItemStorage[]> {
     }
 }
 
+// Retorna somente os itens com o status selecionado.
 async function getByStatus(status: FilterStatus): Promise<ItemStorage[]> {
     const itens = await get()
 
     return itens.filter((item) => item.status === status)
 }
 
+// Persiste a lista completa de itens.
 async function save(itens: ItemStorage[]): Promise<void> {
     try {
         await AsyncStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(itens))
@@ -34,6 +39,7 @@ async function save(itens: ItemStorage[]): Promise<void> {
     }
 }
 
+// Remove um item especifico pelo id.
 async function remove(id: string): Promise<void> {
     try {
         const itens = await get()
@@ -44,6 +50,7 @@ async function remove(id: string): Promise<void> {
     }
 }
 
+// Adiciona um novo item ao final da lista.
 async function add(item: ItemStorage): Promise<void> {
     try {
         const itens = await get()
@@ -54,6 +61,7 @@ async function add(item: ItemStorage): Promise<void> {
     } 
 } 
 
+// Limpa todos os itens salvos.
 async function clear(): Promise<void> {
     try {
         await AsyncStorage.removeItem(ITEMS_STORAGE_KEY)
@@ -62,6 +70,7 @@ async function clear(): Promise<void> {
     }
 }
 
+// Alterna o status de um item entre pendente e concluido.
 async function toggleStatus(id: string): Promise<void> {
     try {
         const itens = await get()
@@ -78,6 +87,7 @@ async function toggleStatus(id: string): Promise<void> {
     }
 } 
 
+// API publica de armazenamento usada pela aplicacao.
 export const itensStorage = {
     get,
     getByStatus,
